@@ -1,4 +1,4 @@
-window.loads = function(_urls,callMyFun){
+window.loads = window.loads || function(_urls,callMyFun){
 	var _ld = {
 		js:function(_url,callback){
 			var _scipt = document.createElement("script");
