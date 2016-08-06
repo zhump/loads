@@ -1,5 +1,8 @@
-window.loads = window.loads || function(_urls,callMyFun){
-	var _ld = {
+/**
+ * 简单封装异步或同步加载资源
+ */
+window.loads = window.loads || function(_urls,callMyFun,ansync){
+	var _lds = {
 		js:function(_url,callback){
 			var _scipt = document.createElement("script");
 			_scipt.setAttribute("type", "text/javascript");
@@ -15,6 +18,7 @@ window.loads = window.loads || function(_urls,callMyFun){
 			} else {
 				_scipt.onload = function() {
 					_scipt.onload = null;
+					console.log('js加载完成')
 					callback ? callback() : '';
 				};
 			}
@@ -29,6 +33,7 @@ window.loads = window.loads || function(_urls,callMyFun){
 				
 				_link.onload = function() {
 					_head.onload = null;
+					console.log('css加载完成')
 					callback ? callback() : '';
 				};
 		}
@@ -38,20 +43,16 @@ window.loads = window.loads || function(_urls,callMyFun){
 		load(_urls[index]);
 	}
 	function load(_url){
-		_ld[_url.indexOf('css!') == 0 ? "css":"js"]((function(_url){
-			return _url.replace('css!','').replace('js!','');
+		_lds[_url.indexOf('css!') == 0 ? "css":"js"]((function(_url){
+			return _url.replace(/css!|js!/g,'');
 		})(_url),function(){
-			index++;
-			if(index == _urls.length){
-				callMyFun();
-			}else{
-				load(_urls[index]);
-			}
+			ansync || (++index == _urls.length ? callMyFun():load(_urls[index]));
 		});
+		!ansync || (++index == _urls.length ? callMyFun():load(_urls[index]));
 	}
 }
 
-//loads(['css!http://192.168.1.103:8020/css/lib.css','js!http://192.168.1.103:8020/js/lib/zm.js'],function(){
-	//console.log('加载完成')
-//})
+//loads(['css!http://172.31.0.115:8020/css/index.css','js!http://172.31.0.115:8020/js/index.js'],function(){
+    //console.log('加载完成')
+//},'ansync'); // 设置最后一个参数为'ansync',加载资源为异步加载，缺省值为同步加载
 
