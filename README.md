@@ -1,5 +1,5 @@
 # loads
-按顺序异步或同步加载js、css文件
+最精巧封装，按顺序异步或同步加载js、css文件
 
 ```js
 loads(['css!http://172.31.0.115:8020/css/index.css','js!http://172.31.0.115:8020/js/index.js'],function(){
