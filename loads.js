@@ -1,7 +1,7 @@
 /**
  * 简单封装异步或同步加载资源
  */
-window.loads = window.loads || function(_urls,callMyFun,ansync){
+window.loads = window.loads || function(_urls,callMyFun,async){
 	var _lds = {
 		js:function(_url,callback){
 			var _scipt = document.createElement("script");
@@ -46,13 +46,13 @@ window.loads = window.loads || function(_urls,callMyFun,ansync){
 		_lds[_url.indexOf('css!') == 0 ? "css":"js"]((function(_url){
 			return _url.replace(/css!|js!/g,'');
 		})(_url),function(){
-			ansync || (++index == _urls.length ? callMyFun():load(_urls[index]));
+			async || (++index == _urls.length ? callMyFun():load(_urls[index]));
 		});
-		!ansync || (++index == _urls.length ? callMyFun():load(_urls[index]));
+		!async || (++index == _urls.length ? callMyFun():load(_urls[index]));
 	}
 }
 
 //loads(['css!http://172.31.0.115:8020/css/index.css','js!http://172.31.0.115:8020/js/index.js'],function(){
     //console.log('加载完成')
-//},'ansync'); // 设置最后一个参数为'ansync',加载资源为异步加载，缺省值为同步加载
+//},'async'); // 设置最后一个参数为'async',加载资源为异步加载，缺省值为同步加载
 
