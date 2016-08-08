@@ -38,7 +38,7 @@ window.loads = window.loads || function(_urls,callMyFun,async){
 				};
 		}
 	};
-	var index = 0;
+	var index = 0,asyncNum = 0;
 	if(_urls && _urls.length > 0){
 		load(_urls[index]);
 	}
@@ -46,8 +46,16 @@ window.loads = window.loads || function(_urls,callMyFun,async){
 		_lds[_url.indexOf('css!') == 0 ? "css":"js"]((function(_url){
 			return _url.replace(/css!|js!/g,'');
 		})(_url),function(){
-			async || (++index == _urls.length ? callMyFun():load(_urls[index]));
+			if(!async){
+				++index == _urls.length ? callMyFun():load(_urls[index])
+			}else{
+				if(++asyncNum == _urls.length){
+					callMyFun();		
+				}
+			}
 		});
-		!async || (++index == _urls.length ? callMyFun():load(_urls[index]));
+		if(async && ++index != _urls.length){
+			 load(_urls[index])
+		}
 	}
 }
